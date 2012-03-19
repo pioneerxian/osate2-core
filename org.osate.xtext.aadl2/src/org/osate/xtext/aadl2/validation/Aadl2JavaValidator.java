@@ -261,6 +261,12 @@ public class Aadl2JavaValidator extends ErrorModelJavaValidator { //AbstractAadl
 
 	
 	@Check(CheckType.FAST)
+	public void caseConnection(Connection connection) {
+		checkDefiningID(connection);
+
+	}
+	
+	@Check(CheckType.FAST)
 	public void casePortConnection(PortConnection connection) {
 		checkPortConnectionClassifiers(connection);
 		checkPortConnectionDirection(connection);
@@ -2076,6 +2082,13 @@ public class Aadl2JavaValidator extends ErrorModelJavaValidator { //AbstractAadl
 		if (dp != null && !(dp instanceof DataPrototype)) {
 			error(dataAccess,
 					"The category of the referenced component prototype must be data.");
+		}
+	}
+	
+	private void checkDefiningID(Connection conn){
+		String name = conn.getName();
+		if (name == null){
+			warning(conn, "Connection is missing defining identifier. Required in AADL V2.1");
 		}
 	}
 
