@@ -103,6 +103,7 @@ import org.osate.aadl2.UnitsType;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.modelsupport.resources.PredeclaredProperties;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
+import org.osate.xtext.aadl2.properties.util.EMFIndexRetrieval;
 import org.osate.xtext.aadl2.properties.util.PSNode;
 
 
@@ -115,22 +116,10 @@ public class PropertiesLinkingService extends DefaultLinkingService {
 		super();
 	}
 
-	public static PropertiesLinkingService getPropertiesLinkingService(Element context){
+	public static PropertiesLinkingService getPropertiesLinkingService(){
 		if (eInstance == null) {
-			Resource rsrc = OsateResourceUtil.getResource(URI.createPlatformResourceURI(PredeclaredProperties.PLUGIN_RESOURCES_DIRECTORY_NAME+"/SEI.aadl"));
+			Resource rsrc = OsateResourceUtil.getResource(URI.createPlatformResourceURI(PredeclaredProperties.PLUGIN_RESOURCES_DIRECTORY_NAME+"/AADL_Project.aadl"));
 			eInstance = (PropertiesLinkingService)((LazyLinkingResource)rsrc).getLinkingService();
-			// Previously we did it based on a supplied Element
-//			if (context.eResource() instanceof Aadl2ResourceImpl){
-//				Element root = context.getElementRoot();
-//				if (root instanceof SystemInstance){
-//					SystemImplementation si = ((SystemInstance)root).getSystemImplementation();
-//					LazyLinkingResource r = (LazyLinkingResource)si.eResource();
-//					eInstance = (PropertiesLinkingService)r.getLinkingService();
-//				}
-//			} else {
-//				LazyLinkingResource r = (LazyLinkingResource)context.eResource();
-//				eInstance = (PropertiesLinkingService)r.getLinkingService();
-//			}
 		}
 		return eInstance;
 	}
@@ -429,14 +418,14 @@ public class PropertiesLinkingService extends DefaultLinkingService {
 	 * @return aadl package or null
 	 */
 	public AadlPackage findAadlPackage(EObject context, String name) {
-		EReference reference = Aadl2Package.eINSTANCE.getPackageSection_ImportedUnit();
+//		EReference reference = Aadl2Package.eINSTANCE.getPackageSection_ImportedUnit();
+		EReference reference = Aadl2Package.eINSTANCE.getPropertySet_ImportedUnit();
 		return findAadlPackage(context, name, reference);
 	}
 	
 
-
 	/**
-	 * Look up package in EMF index or in resource set
+	 * Look up package in EMF index 
 	 * NOTE: the resource set does not have all resources loaded
 	 * @param context Context of reference 
 	 * @param name Package name
@@ -547,7 +536,6 @@ public class PropertiesLinkingService extends DefaultLinkingService {
 	}
 
 
-
 	/**
 	 * find the component classifier taking into account rename aliases
 	 * The name may be qualified with a package name
@@ -611,6 +599,7 @@ public class PropertiesLinkingService extends DefaultLinkingService {
 		return null;
 	}
 
+
 	/**
 	 * find a named element in a property set based on an optionally qualified name. 
 	 * The name is qualified with the property set name, or if unqualified is assumed to be a predeclared property constant
@@ -660,6 +649,8 @@ public class PropertiesLinkingService extends DefaultLinkingService {
 	}
 
 
+
+
 	protected List<EObject> findPropertyConstant(EObject context,
 			EReference reference, String name){
 		// look for property constant in property set
@@ -689,6 +680,7 @@ public class PropertiesLinkingService extends DefaultLinkingService {
 		return null;
 	}
 
+
 	protected List<EObject> findPropertyType(EObject context,
 			EReference reference, String name){
 		// look for property constant in property set
@@ -717,6 +709,22 @@ public class PropertiesLinkingService extends DefaultLinkingService {
 		return null;
 	}
 
+//	/**
+//	 * find property definition based on property name. 
+//	 * The name is qualified with the property set name, or if unqualified is assumed to be a predeclared property
+//	 * @param name property name possibly qualified with the property set name
+//	 * @return Property the property definition or null
+//	 */
+//	public Property findPropertyDefinition(String name){
+//		// look for property type in property set
+//		EReference reference = Aadl2Package.eINSTANCE.getPropertyAssociation_Property();
+//		EObject e = findPropertySetElement(PredeclaredProperties.getAadlProjectPropertySet(), reference, name);
+//		if (e != null && e instanceof Property) {
+//			return (Property)e;
+//		}
+//		return null;
+//	}
+//
 	protected List<EObject> findPropertyDefinitionAsList(EObject context,
 			EReference reference, String name) {
 		// look for property definition in property set
@@ -1707,7 +1715,7 @@ public class PropertiesLinkingService extends DefaultLinkingService {
 	 * @param reference
 	 * @return
 	 */
-	public EObject findNamedElementInPredeclaredPropertySets(String propertyName,
+	protected EObject findNamedElementInPredeclaredPropertySets(String propertyName,
 			EObject context, EReference reference) {
 		for (String predeclaredPSName : AadlUtil.getPredeclaredPropertySetNames()) {
 			EObject res = getIndexedObject(context, reference,getQualifiedName(predeclaredPSName, propertyName));
