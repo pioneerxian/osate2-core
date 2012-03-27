@@ -69,26 +69,76 @@ import org.osate.xtext.aadl2.properties.linking.PropertiesLinkingService;
 
 public class GetProperties {
 
+
+	/**
+	 * find property definition for given name. The property may be qualified by the property set name via the ps parameter
+	 * For predeclared properties this is not required
+	 * @param context EObject the model object that references the property definition
+	 * @param ps String property set name, which may be null
+	 * @param name String Property Definition name
+	 * @return Property or null
+	 */
 	public static Property lookupPropertyDefinition(EObject context,String ps, String name) {
 		return PropertiesLinkingService.getPropertiesLinkingService().findPropertyDefinition(context,ps != null?(ps+ "::" +name):name);
 	}
 
+
+	/**
+	 * find property type for given name. The property may be qualified by the property set name via the ps parameter
+	 * For predeclared properties this is not required
+	 * @param context EObject the model object that references the property definition
+	 * @param ps String property set name, which may be null
+	 * @param name String Property Type name
+	 * @return PropertyType or null
+	 */
 	public static PropertyType lookupPropertyType(EObject context,String ps, String name) {
 		return PropertiesLinkingService.getPropertiesLinkingService().findPropertyType(context,ps != null?(ps+ "::" +name):name);
 	}
 
+
+	/**
+	 * find property constant for given name. The property may be qualified by the property set name via the ps parameter
+	 * For predeclared properties this is not required
+	 * @param context EObject the model object that references the property definition
+	 * @param ps String property set name, which may be null
+	 * @param name String Property Constant name
+	 * @return PropertyConstant or null
+	 */
 	public static PropertyConstant lookupPropertyConstant(EObject context,String ps, String name) {
 		return PropertiesLinkingService.getPropertiesLinkingService().findPropertyConstant(context,ps != null?(ps+ "::" +name):name);
 	}
- 
- public static Property lookupPropertyDefinition(String ps, String name) {
+
+	/**
+	 * find property definition for given property name. The property may be qualified by the property set name via the ps parameter
+	 * For predeclared properties this is not required
+	 * @param ps String property set name, which may be null
+	 * @param name String Property Definition name
+	 * @return Property or null
+	 */
+	public static Property lookupPropertyDefinition(String ps, String name) {
 		return EMFIndexRetrieval.getPropertyDefinitionInWorkspace(ps != null?(ps+ "::" +name):name);
 	}
 
+
+	/**
+	 * find property type for given name. The property type may be qualified by the property set name via the ps parameter
+	 * For predeclared properties this is not required
+	 * @param ps String property set name, which may be null
+	 * @param name String Property Type name
+	 * @return PropertyType or null
+	 */
 	public static PropertyType lookupPropertyType(String ps, String name) {
 		return EMFIndexRetrieval.getPropertyTypeInWorkspace(ps != null?(ps+ "::" +name):name);
 	}
 
+
+	/**
+	 * find property constant for given name. The property constant may be qualified by the property set name via the ps parameter
+	 * For predeclared properties this is not required
+	 * @param ps String property set name, which may be null
+	 * @param name String Property Constant name
+	 * @return PropertyConstant or null
+	 */
 	public static PropertyConstant lookupPropertyConstant(String ps, String name) {
 		return EMFIndexRetrieval.getPropertyConstantInWorkspace(ps != null?(ps+ "::" +name):name);
 	}
@@ -134,11 +184,10 @@ public class GetProperties {
 	public static PropertyConstant lookupPropertyConstant(String name) {
 		return EMFIndexRetrieval.getPropertyConstantInWorkspace(name);
 	}
-
+	
 	/**
 	 * Retrieve the unit literal given a unit string for a property It is useful
 	 * when calling getScaledValue methods that require the literal as object
-	 * 
 	 * @param pd Property Definition
 	 * @param literalname String
 	 * @return UnitLiteral or null if the unit literal could not be found or the
@@ -148,11 +197,17 @@ public class GetProperties {
 		return PropertiesLinkingService.getPropertiesLinkingService().findUnitLiteral(pd, literalname);
 	}
 	
-	public static UnitLiteral findUnitLiteral(NamedElement context,String unitsType, String literal){
-		PropertyType pt = PropertiesLinkingService.getPropertiesLinkingService().findPropertyType(context, unitsType);
+	public static UnitLiteral findUnitLiteral(String unitsType, String literal){
+		PropertyType pt = lookupPropertyType(unitsType);
 		if (pt == null || ! (pt instanceof UnitsType)) return null;
 		return (UnitLiteral) ((UnitsType)pt).findNamedElement(literal);
 	}
+//	
+//	public static UnitLiteral findUnitLiteral(NamedElement context,String unitsType, String literal){
+//		PropertyType pt = PropertiesLinkingService.getPropertiesLinkingService().findPropertyType(context, unitsType);
+//		if (pt == null || ! (pt instanceof UnitsType)) return null;
+//		return (UnitLiteral) ((UnitsType)pt).findNamedElement(literal);
+//	}
 	
 	public static EnumerationLiteral findEnumerationLiteral(Property pd, String literalname) {
 		return PropertiesLinkingService.getPropertiesLinkingService().findEnumerationLiteral(pd, literalname);
@@ -165,19 +220,19 @@ public class GetProperties {
 	}
 	
 	public static UnitLiteral getKBUnitLiteral(NamedElement context){
-		return findUnitLiteral(context, AadlProject.SIZE_UNITS, AadlProject.KB_LITERAL);
+		return findUnitLiteral(AadlProject.SIZE_UNITS, AadlProject.KB_LITERAL);
 	}
 	
 	public static UnitLiteral getMSUnitLiteral(NamedElement context){
-		return findUnitLiteral(context, AadlProject.TIME_UNITS, AadlProject.MS_LITERAL);
+		return findUnitLiteral(AadlProject.TIME_UNITS, AadlProject.MS_LITERAL);
 	}
 	
 	public static UnitLiteral getSecUnitLiteral(NamedElement context){
-		return findUnitLiteral(context, AadlProject.TIME_UNITS, AadlProject.SEC_LITERAL);
+		return findUnitLiteral(AadlProject.TIME_UNITS, AadlProject.SEC_LITERAL);
 	}
 	
 	public static UnitLiteral getMIPSUnitLiteral(NamedElement context){
-		return findUnitLiteral(context, "SEI::"+SEI.PROCESSOR_SPEED_UNITS, SEI.MIPS_LITERAL);
+		return findUnitLiteral("SEI::"+SEI.PROCESSOR_SPEED_UNITS, SEI.MIPS_LITERAL);
 	}
 	
 	
