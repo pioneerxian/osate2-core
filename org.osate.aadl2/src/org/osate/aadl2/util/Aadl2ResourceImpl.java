@@ -53,8 +53,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
  */
 public class Aadl2ResourceImpl extends XMIResourceImpl {
 
-	static final XMLParserPoolImpl parserPool = new XMLParserPoolImpl();
-
 	/**
 	 * Creates an instance of the resource.
 	 * <!-- begin-user-doc -->

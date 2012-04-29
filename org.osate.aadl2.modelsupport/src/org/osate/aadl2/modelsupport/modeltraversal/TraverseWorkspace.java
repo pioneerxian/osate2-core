@@ -11,6 +11,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
+import org.osate.aadl2.modelsupport.resources.PredeclaredProperties;
 import org.osate.internal.workspace.AadlProject;
 import org.osate.workspace.WorkspacePlugin;
 
@@ -44,7 +45,7 @@ public class TraverseWorkspace {
 		for (int i = 0, max = projects.length; i < max; i++) {
 			IProject project = projects[i];
 			if ( project.isOpen()// && AadlProject.hasAadlNature(project)
-					&& !project.getName().equalsIgnoreCase(OsateResourceUtil.PLUGIN_RESOURCES_DIRECTORY_NAME)) {
+					&& !project.getName().equalsIgnoreCase(PredeclaredProperties.PLUGIN_RESOURCES_DIRECTORY_NAME)) {
 				tmp[cn++] = project;
 			}
 		}
@@ -53,7 +54,7 @@ public class TraverseWorkspace {
 	
 	public static IFile getAADLProjectFile(){
 		IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		IProject prproject = myWorkspaceRoot.getProject(OsateResourceUtil.PLUGIN_RESOURCES_DIRECTORY_NAME);
+		IProject prproject = myWorkspaceRoot.getProject(PredeclaredProperties.PLUGIN_RESOURCES_DIRECTORY_NAME);
 		return prproject.getFile("AADL_Project.aadl");
 	}
 

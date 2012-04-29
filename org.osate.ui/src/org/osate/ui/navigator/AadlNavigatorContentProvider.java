@@ -37,6 +37,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
+import org.osate.aadl2.modelsupport.resources.PredeclaredProperties;
 import org.osate.workspace.WorkspacePlugin;
 
 
@@ -47,7 +48,7 @@ public class AadlNavigatorContentProvider extends WorkbenchContentProvider
 		if (element instanceof IProject)
 		{
 			IProject project = (IProject)element;
-			if (project.getName().equals(OsateResourceUtil.PLUGIN_RESOURCES_DIRECTORY_NAME))
+			if (project.getName().equals(PredeclaredProperties.PLUGIN_RESOURCES_DIRECTORY_NAME))
 			{
 				try
 				{

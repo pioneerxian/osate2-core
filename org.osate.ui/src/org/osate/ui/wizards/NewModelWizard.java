@@ -81,6 +81,7 @@ import org.osate.aadl2.Aadl2Factory;
 import org.osate.aadl2.Aadl2Package;
 import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
+import org.osate.aadl2.modelsupport.resources.PredeclaredProperties;
 import org.osate.ui.OsateUiPlugin;
 import org.osate.workspace.IResourceUtility;
 import org.osate.workspace.WorkspacePlugin;
@@ -139,7 +140,7 @@ public class NewModelWizard extends Wizard implements INewWizard
 			if (selectedElement instanceof IResource)
 			{
 				IProject project = ((IResource)selectedElement).getProject();
-				if (!project.getName().equals(OsateResourceUtil.PLUGIN_RESOURCES_DIRECTORY_NAME))
+				if (!project.getName().equals(PredeclaredProperties.PLUGIN_RESOURCES_DIRECTORY_NAME))
 					this.project = project;
 				else
 					this.project = null;
@@ -415,7 +416,7 @@ public class NewModelWizard extends Wizard implements INewWizard
 							IProject[] projects = ((IWorkspace)element).getRoot().getProjects();
 							ArrayList<IProject> openProjects = new ArrayList<IProject>();
 							for (IProject project : projects)
-								if (project.isOpen() && !project.getName().equals(OsateResourceUtil.PLUGIN_RESOURCES_DIRECTORY_NAME))
+								if (project.isOpen() && !project.getName().equals(PredeclaredProperties.PLUGIN_RESOURCES_DIRECTORY_NAME))
 									openProjects.add(project);
 							return openProjects.size() == 0 ? new Object[0] : openProjects.toArray();
 						}

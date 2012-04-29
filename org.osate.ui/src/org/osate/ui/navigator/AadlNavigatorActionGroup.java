@@ -87,7 +87,7 @@ public class AadlNavigatorActionGroup extends MainActionGroup
 	{
 		Object selectedElement = ((IStructuredSelection)getContext().getSelection()).getFirstElement();
 		if (selectedElement instanceof IResource &&
-				((IResource)selectedElement).getProject().getName().equals(OsateResourceUtil.PLUGIN_RESOURCES_DIRECTORY_NAME))
+				((IResource)selectedElement).getProject().getName().equals(PredeclaredProperties.PLUGIN_RESOURCES_DIRECTORY_NAME))
 		{
 			if (selectedElement instanceof IFile)
 			{
