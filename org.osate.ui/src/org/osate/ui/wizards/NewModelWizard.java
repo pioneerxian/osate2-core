@@ -81,7 +81,7 @@ import org.osate.aadl2.Aadl2Factory;
 import org.osate.aadl2.Aadl2Package;
 import org.osate.aadl2.NamedElement;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
-import org.osate.aadl2.modelsupport.resources.PredeclaredProperties;
+import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 import org.osate.ui.OsateUiPlugin;
 import org.osate.workspace.IResourceUtility;
 import org.osate.workspace.WorkspacePlugin;

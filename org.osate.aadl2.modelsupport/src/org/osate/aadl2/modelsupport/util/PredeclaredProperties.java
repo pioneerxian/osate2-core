@@ -1,4 +1,4 @@
-package org.osate.aadl2.modelsupport.resources;
+package org.osate.aadl2.modelsupport.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +18,7 @@ import org.eclipse.xtext.ui.XtextProjectHelper;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.PropertySet;
 import org.osate.aadl2.modelsupport.Activator;
-import org.osate.aadl2.modelsupport.util.AadlUtil;
+import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.pluginsupport.PluginSupportUtil;
 import org.osate.workspace.WorkspacePlugin;
 

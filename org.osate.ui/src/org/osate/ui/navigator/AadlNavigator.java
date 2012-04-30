@@ -51,7 +51,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.views.navigator.ResourceComparator;
 import org.eclipse.ui.views.navigator.ResourceNavigator;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
-import org.osate.aadl2.modelsupport.resources.PredeclaredProperties;
+import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 import org.osate.ui.navigator.AadlElementImageDescriptor.ModificationFlag;
 
 

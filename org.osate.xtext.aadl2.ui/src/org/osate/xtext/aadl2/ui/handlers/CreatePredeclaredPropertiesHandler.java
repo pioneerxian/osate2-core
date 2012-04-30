@@ -4,7 +4,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
-import org.osate.aadl2.modelsupport.resources.PredeclaredProperties;
+import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 
 import com.google.inject.Inject;
 

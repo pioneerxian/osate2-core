@@ -37,7 +37,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.model.WorkbenchContentProvider;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
-import org.osate.aadl2.modelsupport.resources.PredeclaredProperties;
+import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 import org.osate.workspace.WorkspacePlugin;
 
 

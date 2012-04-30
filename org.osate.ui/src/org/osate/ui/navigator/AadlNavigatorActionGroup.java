@@ -53,7 +53,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.navigator.IResourceNavigator;
 import org.eclipse.ui.views.navigator.MainActionGroup;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
-import org.osate.aadl2.modelsupport.resources.PredeclaredProperties;
+import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 import org.osate.ui.OsateUiPlugin;
 
 

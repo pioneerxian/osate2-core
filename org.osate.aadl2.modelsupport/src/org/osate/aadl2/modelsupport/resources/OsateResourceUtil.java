@@ -57,6 +57,7 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.SystemImplementation;
+import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 import org.osate.aadl2.util.Aadl2ResourceImpl;
 import org.osate.core.OsateCorePlugin;
 import org.osate.workspace.WorkspacePlugin;

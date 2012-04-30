@@ -107,8 +107,8 @@ import org.osate.aadl2.UnitLiteral;
 import org.osate.aadl2.UnitsType;
 import org.osate.aadl2.impl.SubprogramImpl;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
-import org.osate.aadl2.modelsupport.resources.PredeclaredProperties;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
+import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 import org.osate.xtext.aadl2.properties.util.EMFIndexRetrieval;
 import org.osate.xtext.aadl2.properties.util.PSNode;
 
