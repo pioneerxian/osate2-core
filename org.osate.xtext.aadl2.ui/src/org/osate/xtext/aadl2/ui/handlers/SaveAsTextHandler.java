@@ -30,7 +30,7 @@ import org.osate.aadl2.Element;
 import org.osate.aadl2.ModelUnit;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.workspace.WorkspacePlugin;
-import org.osate.xtext.aadl2.util.AadlUnparser;
+import org.osate.xtext.aadl2.unparsing.AadlUnparser;
 
 import com.google.inject.Inject;
 

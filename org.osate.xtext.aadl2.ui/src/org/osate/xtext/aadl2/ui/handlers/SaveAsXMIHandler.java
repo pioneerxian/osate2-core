@@ -37,7 +37,6 @@ import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.util.Aadl2ResourceFactoryImpl;
 import org.osate.aadl2.util.Aadl2ResourceImpl;
 import org.osate.workspace.WorkspacePlugin;
-import org.osate.xtext.aadl2.util.AadlUnparser;
 
 import com.google.inject.Inject;
 

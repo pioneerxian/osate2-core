@@ -34,7 +34,9 @@
  *
  * @version $Id: UnparseText.java,v 1.1 2008-01-24 21:40:36 jseibel Exp $
  */
-package org.osate.aadl2.modelsupport;
+package org.osate.xtext.aadl2.unparsing;
+
+import org.osate.aadl2.modelsupport.AadlConstants;
 
 
 /**

@@ -36,7 +36,7 @@
  *
  * @version $Id: AadlUnparser.java,v 1.100 2008-01-24 21:40:34 jseibel Exp $
  */
-package org.osate.xtext.aadl2.util;
+package org.osate.xtext.aadl2.unparsing;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -63,7 +63,6 @@ import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.osate.aadl2.*;
 import org.osate.aadl2.instance.InstanceObject;
 import org.osate.aadl2.modelsupport.AadlConstants;
-import org.osate.aadl2.modelsupport.UnparseText;
 import org.osate.aadl2.modelsupport.modeltraversal.AadlProcessingSwitch;
 import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
