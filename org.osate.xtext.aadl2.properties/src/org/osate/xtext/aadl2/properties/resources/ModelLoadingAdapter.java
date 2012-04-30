@@ -1,4 +1,4 @@
-package org.osate.aadl2.modelsupport.resources;
+package org.osate.xtext.aadl2.properties.resources;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;

@@ -42,7 +42,7 @@ package org.osate.ui.actions;
 
 import org.eclipse.emf.ecore.resource.Resource;
 import org.osate.aadl2.Element;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 
 /**

@@ -55,11 +55,11 @@ import org.osate.aadl2.SubprogramGroupAccess;
 import org.osate.aadl2.SubprogramGroupSubcomponent;
 import org.osate.aadl2.SubprogramGroupSubcomponentType;
 import org.osate.aadl2.TriggerPort;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
 import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 import org.osate.aadl2.util.Aadl2Util;
 import org.osate.xtext.aadl2.properties.linking.PropertiesLinkingService;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 public class Aadl2LinkingService extends PropertiesLinkingService {
 //	private  ErrorModelLanguageServices emLangS  = new ErrorModelLanguageServices();

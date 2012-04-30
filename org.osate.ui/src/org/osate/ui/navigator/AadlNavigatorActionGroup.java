@@ -52,9 +52,9 @@ import org.eclipse.ui.actions.RefreshAction;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.views.navigator.IResourceNavigator;
 import org.eclipse.ui.views.navigator.MainActionGroup;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 import org.osate.ui.OsateUiPlugin;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 
 public class AadlNavigatorActionGroup extends MainActionGroup

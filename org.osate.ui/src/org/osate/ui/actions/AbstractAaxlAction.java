@@ -78,6 +78,7 @@ import org.osate.aadl2.modelsupport.util.AadlUtil;
 import org.osate.ui.OsateUiPlugin;
 import org.osate.ui.dialogs.Dialog;
 import org.osate.xtext.aadl2.properties.linking.PropertiesLinkingService;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 import org.osate.xtext.aadl2.properties.util.GetProperties;
 import org.osgi.framework.Bundle;
 
@@ -174,7 +175,7 @@ public abstract class AbstractAaxlAction implements IWorkbenchWindowActionDelega
 	 */
 	public final synchronized void run(IAction action) {
 		Element root = null;
-		root = AadlUtil.getElement(currentSelection);
+		root = OsateResourceUtil.getElement(currentSelection);
 		if (root != null) {
 			/* Here we create the job, and then do two very important things:
 			 * (1) set the scheduling rule so that the job locks up the

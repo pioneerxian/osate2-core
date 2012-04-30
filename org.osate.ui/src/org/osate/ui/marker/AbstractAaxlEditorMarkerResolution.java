@@ -9,8 +9,8 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 import org.osate.aadl2.Element;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.ui.UiUtil;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 
 

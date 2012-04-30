@@ -6,18 +6,13 @@ import static com.google.inject.util.Modules.override;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IStorage;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
-import org.eclipse.xtext.ui.resource.XtextResourceSetProvider;
-import org.osate.aadl2.PropertySet;
-import org.osate.aadl2.modelsupport.modeltraversal.TraverseWorkspace;
-import org.osate.aadl2.modelsupport.resources.ModelLoadingAdapter;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
+import org.osate.aadl2.modelsupport.util.TraverseWorkspace;
 import org.osate.core.OsateCorePlugin;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 import org.osate.xtext.aadl2.properties.ui.internal.PropertiesActivator;
 import org.osate.xtext.aadl2.properties.util.EMFIndexRetrieval;
 import org.osgi.framework.BundleContext;
@@ -27,12 +22,10 @@ import com.google.inject.Injector;
 
 public class MyPropertiesActivator extends PropertiesActivator {//implements org.eclipse.ui.IStartup{
 
-
 //
-//    public void earlyStartup(){
-//    	new org.osate.xtext.aadl2.properties.PropertiesRuntimeModule();
-//    };
-    
+//  public void earlyStartup(){
+//  	new org.osate.xtext.aadl2.Aadl2RuntimeModule();
+//  };
 
 	@Inject
 	private ResourceDescriptionsProvider rdp ; 
@@ -42,6 +35,7 @@ public class MyPropertiesActivator extends PropertiesActivator {//implements org
 
 	@Inject
 	private IResourceSetProvider resourceSetProvider;
+   
 
 	@Override
 	public void start(BundleContext context) throws Exception {

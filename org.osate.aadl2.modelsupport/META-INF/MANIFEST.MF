@@ -14,9 +14,6 @@ Require-Bundle: org.osate.aadl2,
  org.eclipse.xtext.ui;bundle-version="2.0.1"
 Bundle-ActivationPolicy: lazy
 Export-Package: org.osate.aadl2.modelsupport,
- org.osate.aadl2.modelsupport.errorreporting,
- org.osate.aadl2.modelsupport.modeltraversal,
- org.osate.aadl2.modelsupport.resources,
  org.osate.aadl2.modelsupport.util
 Bundle-Vendor: CMU-SEI
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

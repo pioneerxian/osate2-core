@@ -44,7 +44,9 @@ import org.osate.aadl2.Element;
 import org.osate.aadl2.ModelUnit;
 import org.osate.aadl2.instance.InstanceObject;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
+import org.osate.aadl2.modelsupport.util.TraverseWorkspace;
 import org.osate.workspace.WorkspacePlugin;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 
 abstract class AbstractSimpleTraversal extends AbstractTraversal {
@@ -67,7 +69,7 @@ abstract class AbstractSimpleTraversal extends AbstractTraversal {
 	public final EList<Element> visitWorkspace() {
 		HashSet<IFile> files = TraverseWorkspace.getAadlandInstanceFilesInWorkspace();
 		for (IFile file : files){
-			Element target = (Element)AadlUtil.getElement(file);
+			Element target = (Element)OsateResourceUtil.getElement(file);
 			if (target != null){
 				visitRoot(target);
 			}
@@ -90,7 +92,7 @@ abstract class AbstractSimpleTraversal extends AbstractTraversal {
 	public final EList<Element> visitWorkspaceDeclarativeModels() {
 		HashSet<IFile> files = TraverseWorkspace.getAadlFilesInWorkspace();
 		for (IFile file : files){
-			ModelUnit target = (ModelUnit)AadlUtil.getElement(file);
+			ModelUnit target = (ModelUnit)OsateResourceUtil.getElement(file);
 			if (target != null){
 				visitRoot(target);
 			}
@@ -113,7 +115,7 @@ abstract class AbstractSimpleTraversal extends AbstractTraversal {
 	public final EList visitWorkspaceInstanceModels() {
 		HashSet<IFile> files = TraverseWorkspace.getInstanceModelFilesInWorkspace();
 		for (IFile file : files){
-			InstanceObject target = (InstanceObject)AadlUtil.getElement(file);
+			InstanceObject target = (InstanceObject)OsateResourceUtil.getElement(file);
 			if (target != null){
 				visitRoot(target);
 			}

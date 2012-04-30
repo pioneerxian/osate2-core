@@ -54,22 +54,16 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.osate.aadl2.Aadl2Package;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AbstractConnectionEnd;
@@ -111,14 +105,11 @@ import org.osate.aadl2.ProcessorPort;
 import org.osate.aadl2.ProcessorSubcomponent;
 import org.osate.aadl2.ProcessorSubprogram;
 import org.osate.aadl2.Property;
-import org.osate.aadl2.PropertyAssociation;
 import org.osate.aadl2.PropertySet;
 import org.osate.aadl2.PropertyType;
-import org.osate.aadl2.Prototype;
 import org.osate.aadl2.Realization;
 import org.osate.aadl2.Subcomponent;
 import org.osate.aadl2.SubcomponentType;
-import org.osate.aadl2.SystemImplementation;
 import org.osate.aadl2.SystemSubcomponent;
 import org.osate.aadl2.ThreadGroupSubcomponent;
 import org.osate.aadl2.ThreadSubcomponent;
@@ -128,13 +119,8 @@ import org.osate.aadl2.instance.ConnectionInstance;
 import org.osate.aadl2.instance.FeatureInstance;
 import org.osate.aadl2.instance.InstanceObject;
 import org.osate.aadl2.instance.SystemInstance;
-import org.osate.aadl2.modelsupport.modeltraversal.ForAllElement;
-import org.osate.aadl2.modelsupport.modeltraversal.SimpleSubclassCounter;
-import org.osate.aadl2.modelsupport.modeltraversal.TraverseWorkspace;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.parsesupport.LocationReference;
 import org.osate.aadl2.util.Aadl2Util;
-import org.osate.workspace.WorkspacePlugin;
 
 
 /**
@@ -1181,50 +1167,6 @@ public final class AadlUtil {
 	// return packrefFound;
 	// }
 
-	/**
-	 * Try to retrieve an {@link org.osate.aadl2.Element} from an object.
-	 * This method is intended to be used with objects that obtained from a
-	 * selection event, i.e., from the
-	 * {@link org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)}
-	 * method.
-	 * <p>
-	 * If the object is an Element, it is returned. Otherwise, the method tries
-	 * to adapt the object to an Element. The Object could be an Element, IAdaptable, an instance model resource,
-	 * or a TreeSelection of a IFile in the Navigator
-	 * 
-	 * @param object The object to get an Element from.
-	 * @return The Element, or <code>null</code> if no Element can be obtained
-	 *         from the given object.
-	 */
-	public static Element getElement(final Object object) {
-		Element theElement = null;
-		// Is it an Element?
-		if (object instanceof Element) {
-			theElement = (Element) object;
-			if (theElement != null) return theElement;
-		}
-		if (object instanceof IAdaptable) {
-		  theElement = (Element) ((IAdaptable) object).getAdapter(Element.class);
-		  if (theElement != null) return theElement;
-	    }
-		if (object instanceof IResource && ((IResource)object).getFileExtension().equalsIgnoreCase(WorkspacePlugin.INSTANCE_FILE_EXT)){
-			Resource res = OsateResourceUtil.getResource((IResource)object);
-			EList<EObject> rl = res.getContents();
-			if (rl.isEmpty()&& rl.get(0) instanceof Element) return (Element) rl.get(0);
-		}
-		if (object instanceof TreeSelection){
-			for (Iterator iterator = ((TreeSelection)object).iterator(); iterator.hasNext();) {
-				Object f = (Object) iterator.next();
-				if (f instanceof IResource){
-					Resource res = OsateResourceUtil.getResource((IResource)f);
-					EList<EObject> rl = res.getContents();
-					if (rl.isEmpty()&& rl.get(0) instanceof Element) return (Element) rl.get(0);
-				}
-			}
-			return null;
-		}
-		return  null;
-	}
 
 	/**
 	 * find Meta model class in meta model packages
@@ -1477,181 +1419,6 @@ public final class AadlUtil {
 	 * ================================================================
 	 */
 
-	 /**
-	 * For the subtree rooted at the given node, count the number of model
-	 * elements whose class extends from the given model element type. For
-	 * example,
-	 * 
-	 * <pre>
-	 * int numSubs = AadlUtil.countElementsBySubclass(root, Subcomponent.class);
-	 * </pre>
-	 * 
-	 * @param root
-	 *            The root of the subtree.
-	 * @param clazz
-	 *            The class to count instances of.
-	 * @return The number of model elements in the given subtree that are
-	 *         instances of the given class or one of its subclasses.
-	 */
-	public static int countElementsBySubclass(final Element root,
-			final Class clazz) {
-		final SimpleSubclassCounter counter = new SimpleSubclassCounter(clazz);
-		counter.defaultTraversal(root);
-		return counter.getCount();
-	}
-	// TODO: [MULTIPLESUBCLASSCOUNTER] Uncomment after MultipleSubclassCounter
-	// has been moved to OSATE 2.
-	// /**
-	// * For the subtree rooted at the given node, count the number of model
-	// * elements whose class extends from one of the given model element types.
-	// * For example,
-	// *
-	// * <pre>
-	// * int count = AadlUtil.countElementsBySubclass(root,
-	// * new Class[] { DataClassifier.class, BusClassifier.class });
-	// * </pre>
-	// *
-	// * @param root
-	// * The root of the subtree.
-	// * @param classes
-	// * The classes to count instances of.
-	// * @return The number of model elements in the given subtree whose
-	// * class is, or extends from, one of the given classes.
-	// */
-	// public static int countElementsBySubclass(final AObject root, final
-	// Class[] classes) {
-	// final MultipleSubclassCounter counter = new
-	// MultipleSubclassCounter(classes);
-	// counter.defaultTraversal(root);
-	// return counter.getCount();
-	// }
-	// TODO: [SIMPLEEXACTCLASSCOUNTER] Uncomment after SimpleExactClassCounter
-	// has been moved to OSATE 2.
-	// /**
-	// * For the subtree rooted at the given node, count the number of model
-	// * elements whose class is the given model element type.
-	// * For example,
-	// *
-	// * <pre>
-	// * int count = AadlUtil.countElementsExactClass(root, DataType.class);
-	// * </pre>
-	// *
-	// * @param root
-	// * The root of the subtree.
-	// * @param clazz
-	// * The class to count instances of.
-	// * @return The number of model elements in the given subtree whose
-	// * class is the given class.
-	// */
-	// public static int countElementsExactClass(final AObject root, final Class
-	// clazz) {
-	// final SimpleExactClassCounter counter = new
-	// SimpleExactClassCounter(clazz);
-	// counter.defaultTraversal(root);
-	// return counter.getCount();
-	// }
-	// TODO: [MULTIPLEEXACTCLASSCOUNTER] Uncomment after
-	// MultipleExactClassCounter has been moved to OSATE 2.
-	// /**
-	// * For the subtree rooted at the given node, count the number of model
-	// * elements whose class is one of the given model element types.
-	// * For example,
-	// *
-	// * <pre>
-	// * int count = AadlUtil.countElementsBySubclass(root,
-	// * new Class[] { DataType.class, BusType.class });
-	// * </pre>
-	// *
-	// * @param root
-	// * The root of the subtree.
-	// * @param classes
-	// * The classes to count instances of.
-	// * @return The number of model elements in the given subtree whose
-	// * class is one of the given classes.
-	// */
-	// public static int countElementsExactClass(final AObject root, final
-	// Class[] classes) {
-	// final MultipleExactClassCounter counter = new
-	// MultipleExactClassCounter(classes);
-	// counter.defaultTraversal(root);
-	// return counter.getCount();
-	// }
-	// TODO: [SPECIFICATION] Rewrite after the new URIs have been figured out.
-	// /**
-	// * Returns a URI for the eObject,
-	// * i.e., either
-	// * the eProxyURI,
-	// * the URI of the eResource with the fragment produced by the eResource,
-	// * or the URI consisting of just the fragment that would be produced by a
-	// default Resource
-	// * with the eObject as its only contents.
-	// * @param eObject the object for which to get the URI.
-	// * @return the URI for the object.
-	// */
-	// public static URI getURI(EObject eObject)
-	// {
-	// // If it's a proxy, use that.
-	// //
-	// URI proxyURI = ((InternalEObject)eObject).eProxyURI();
-	// if (proxyURI != null)
-	// {
-	// return proxyURI;
-	// }
-	// else
-	// {
-	// // If it is in a resource, form the URI relative to that resource.
-	// //
-	// EObject eRootContainer = EcoreUtil.getRootContainer(eObject);
-	// Resource resource = eRootContainer.eResource();
-	// if (resource != null)
-	// {
-	// return
-	// resource.getURI().appendFragment(resource.getURIFragment(eObject));
-	// }
-	// else
-	// {
-	// // Implement the default encoding algorithm.
-	// //
-	// StringBuffer result = new StringBuffer("/");
-	// List<String> uriFragmentPath = new ArrayList<String>();
-	// for (EObject container = eObject.eContainer(); container != null;
-	// container = eObject.eContainer())
-	// {
-	// uriFragmentPath.add(((InternalEObject)container).eURIFragmentSegment(eObject.eContainmentFeature(),
-	// eObject));
-	// eObject = container;
-	// }
-	// if (eObject instanceof NamedElement) {
-	// final String objectName = ((NamedElement) eObject).getName();
-	// if (objectName != null && objectName.length() > 0) {
-	// String fragment = (eObject instanceof
-	// AadlSpec?"aadlSpec":"systemInstance") + "[@name=" + objectName + "]";
-	// uriFragmentPath.add(fragment);
-	// }
-	// }
-	//
-	//
-	// int size = uriFragmentPath.size();
-	// if (size > 0)
-	// {
-	// for (int i = size - 1;; --i)
-	// {
-	// result.append(uriFragmentPath.get(i));
-	// if (i == 0)
-	// {
-	// break;
-	// }
-	// else
-	// {
-	// result.append('/');
-	// }
-	// }
-	// }
-	//
-	// return URI.createURI(result.toString());
-	// }
-	// }
-	// }
 	// TODO: [INSTANCE] Uncomment after instances have been completed.
 	// /**
 	// * get the ComponentClassifierSelection for a component instance
@@ -2079,67 +1846,26 @@ public final class AadlUtil {
 		return null;
 	}
 
-	/**
-	 * Get all property definitions that are used in the Aadl model. This
-	 * includes the predeclared properties and any property definitions in user
-	 * declared property sets.
-	 * 
-	 * @param si System Implementation
-	 * @return property definitions
-	 */
-	public static EList<Property> getAllUsedPropertyDefinition(SystemImplementation si) {
-		EList<Property> result = new UniqueEList<Property>();
-
-		EList allUsedClassifiers = new ForAllElement().processTopDownComponentClassifier(si);
-		// collect topdown component impl. do it and its type to find PA
-		for (Iterator it = allUsedClassifiers.iterator(); it.hasNext();) {
-			ComponentClassifier cc = (ComponentClassifier) it.next();
-			addUsedPropertyDefinitions(cc, result);
-		}
-		return result;
-	}
-
-	/**
-	 * find all property associations and add its property definition to the
-	 * results
-	 * 
-	 * @param root Element whose subtree is being searched
-	 * @param result EList holding the used property definitions
-	 * @return List holding the used property definitions
-	 */
-	private static List<Property> addUsedPropertyDefinitions(Element root, List<Property> result) {
-		TreeIterator<Element> it = EcoreUtil.getAllContents(Collections.singleton(root));
-		while (it.hasNext()) {
-			Element ao = it.next();
-			if (ao instanceof PropertyAssociation) {
-				Property pd = ((PropertyAssociation) ao).getProperty();
-				if (pd != null) {
-					result.add(pd);
-				}
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Get all component implementations; in all anon. name spaces and from all
-	 * packages (public and private parts)
-	 * 
-	 * @return EList of component impl
-	 */
-	public static EList<ComponentImplementation> getAllComponentImpl() {
-		EList<ComponentImplementation> result = new BasicEList<ComponentImplementation>();
-		HashSet<IFile> files = TraverseWorkspace.getAadlFilesInWorkspace();
-		for (IFile file : files){
-			ModelUnit target = (ModelUnit)AadlUtil.getElement(file);
-			if (target != null){
-				if (target instanceof AadlPackage) {
-					result.addAll(getAllComponentImpl((AadlPackage) target));
-				}
-			}
-		}
-		return result;
-	}
+//
+//	/**
+//	 * Get all component implementations; in all anon. name spaces and from all
+//	 * packages (public and private parts)
+//	 * 
+//	 * @return EList of component impl
+//	 */
+//	public static EList<ComponentImplementation> getAllComponentImpl() {
+//		EList<ComponentImplementation> result = new BasicEList<ComponentImplementation>();
+//		HashSet<IFile> files = TraverseWorkspace.getAadlFilesInWorkspace();
+//		for (IFile file : files){
+//			ModelUnit target = (ModelUnit)AadlUtil.getElement(file);
+//			if (target != null){
+//				if (target instanceof AadlPackage) {
+//					result.addAll(getAllComponentImpl((AadlPackage) target));
+//				}
+//			}
+//		}
+//		return result;
+//	}
 
 	/**
 	 * Get all component implementation; in anon. name space and from all
@@ -2148,7 +1874,7 @@ public final class AadlUtil {
 	 * @param o AadlPackage
 	 * @return EList of component impl
 	 */
-	private static EList<ComponentImplementation> getAllComponentImpl(AadlPackage o) {
+	public static EList<ComponentImplementation> getAllComponentImpl(AadlPackage o) {
 		EList<ComponentImplementation> result = new BasicEList<ComponentImplementation>();
 		PackageSection psec = o.getOwnedPublicSection();
 		if (psec != null) {

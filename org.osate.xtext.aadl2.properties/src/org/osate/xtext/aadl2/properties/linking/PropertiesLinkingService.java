@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -25,7 +24,6 @@ import org.osate.aadl2.AccessType;
 import org.osate.aadl2.BasicProperty;
 import org.osate.aadl2.BasicPropertyAssociation;
 import org.osate.aadl2.CallContext;
-import org.osate.aadl2.CallSpecification;
 import org.osate.aadl2.CalledSubprogram;
 import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentClassifier;
@@ -93,7 +91,6 @@ import org.osate.aadl2.Subcomponent;
 import org.osate.aadl2.SubcomponentType;
 import org.osate.aadl2.SubprogramAccess;
 import org.osate.aadl2.SubprogramCall;
-import org.osate.aadl2.SubprogramCallSequence;
 import org.osate.aadl2.SubprogramClassifier;
 import org.osate.aadl2.SubprogramGroupAccess;
 import org.osate.aadl2.SubprogramGroupSubcomponent;
@@ -105,11 +102,9 @@ import org.osate.aadl2.ThreadImplementation;
 import org.osate.aadl2.ThreadSubcomponent;
 import org.osate.aadl2.UnitLiteral;
 import org.osate.aadl2.UnitsType;
-import org.osate.aadl2.impl.SubprogramImpl;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
-import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
-import org.osate.xtext.aadl2.properties.util.EMFIndexRetrieval;
+import org.osate.aadl2.modelsupport.util.TraverseWorkspace;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 import org.osate.xtext.aadl2.properties.util.PSNode;
 
 
@@ -124,11 +119,11 @@ public class PropertiesLinkingService extends DefaultLinkingService {
 
 	public static PropertiesLinkingService getPropertiesLinkingService(){
 		if (eInstance == null) {
-			Resource rsrc = OsateResourceUtil.getResource(URI.createPlatformResourceURI(PredeclaredProperties.PLUGIN_RESOURCES_DIRECTORY_NAME+"/AADL_Project.aadl"));
+			Resource rsrc = OsateResourceUtil.getResource(TraverseWorkspace.getAADLProjectFile());
 			eInstance = (PropertiesLinkingService)((LazyLinkingResource)rsrc).getLinkingService();
 		}
 		return eInstance;
-	}
+	} 
 
 	private static PSNode psNode = new PSNode();
 

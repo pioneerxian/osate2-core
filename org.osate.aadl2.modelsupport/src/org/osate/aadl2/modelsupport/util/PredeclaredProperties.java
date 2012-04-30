@@ -13,12 +13,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.xtext.ui.XtextProjectHelper;
-import org.osate.aadl2.Element;
-import org.osate.aadl2.PropertySet;
 import org.osate.aadl2.modelsupport.Activator;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.pluginsupport.PluginSupportUtil;
 import org.osate.workspace.WorkspacePlugin;
 
@@ -151,7 +149,7 @@ public class PredeclaredProperties {
 	private static void copyContributedResourceIntoWorkspace(
 			URI contributedResourceUri, IFile contributedResourceInWorkspace)
 			throws IOException, CoreException {
-		URIConverter uricvt = OsateResourceUtil.getResourceSet().getURIConverter();
+		URIConverter uricvt = new ResourceSetImpl().getURIConverter();
 		InputStream contributedResourceContentsAsStream = uricvt
 				.createInputStream(contributedResourceUri.trimFileExtension()
 						.appendFileExtension(WorkspacePlugin.SOURCE_FILE_EXT));

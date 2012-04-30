@@ -24,7 +24,7 @@ import org.eclipse.xtext.util.concurrent.IUnitOfWork;
 import org.osate.aadl2.Aadl2Factory;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.NamedElement;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 public class SerializeHandler extends AbstractHandler {
 

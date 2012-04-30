@@ -50,6 +50,7 @@ import org.osate.aadl2.Element;
 import org.osate.aadl2.Subcomponent;
 import org.osate.aadl2.SubprogramCall;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
+import org.osate.xtext.aadl2.properties.util.ModelUtil;
 
 
 /**
@@ -83,7 +84,7 @@ final class BottomUpComponentImplTraversal extends AbstractTraversal {
 
 	@Override
 	public EList visitWorkspaceDeclarativeModels() {
-		processBottomUpComponentImpl(AadlUtil.getAllComponentImpl());
+		processBottomUpComponentImpl(ModelUtil.getAllComponentImpl());
 		return processingMethod.getResultList();
 	}
 	

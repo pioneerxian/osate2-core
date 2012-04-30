@@ -11,6 +11,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.osate.workspace,
  org.osate.aadl2,
- org.osate.aadl2.modelsupport
+ org.osate.aadl2.modelsupport,
+ org.osate.ui;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

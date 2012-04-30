@@ -32,9 +32,9 @@ import org.osate.aadl2.modelsupport.errorreporting.AnalysisErrorReporterManager;
 import org.osate.aadl2.modelsupport.errorreporting.InternalErrorReporter;
 import org.osate.aadl2.modelsupport.errorreporting.LogInternalErrorReporter;
 import org.osate.aadl2.modelsupport.errorreporting.MarkerAnalysisErrorReporter;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.util.Aadl2ResourceImpl;
 import org.osate.core.OsateCorePlugin;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 import com.google.inject.Inject;
 

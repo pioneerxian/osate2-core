@@ -31,10 +31,11 @@
  * under the contract clause at 252.227.7013.
  * </copyright>
  */
-package org.osate.aadl2.modelsupport.resources;
+package org.osate.xtext.aadl2.properties.resources;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
@@ -45,13 +46,17 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 import org.eclipse.xtext.ui.resource.IResourceSetProvider;
@@ -110,9 +115,6 @@ public class OsateResourceUtil {
     		}
     	}
         PredeclaredProperties.initPluginContributedAadl();
-        IWorkspace workspace = ResourcesPlugin.getWorkspace();
-        IWorkspaceRoot root = workspace.getRoot();
-        IProject project = root.getProject(PredeclaredProperties.PLUGIN_RESOURCES_DIRECTORY_NAME);
         if (fResourceSetProvider == null)
         	fResourceSetProvider = injector.getInstance(IResourceSetProvider.class);
 
@@ -348,6 +350,50 @@ public class OsateResourceUtil {
 				filename + "_" + si.getTypeName() + "_" + si.getImplementationName() );
 		instanceURI = instanceURI.appendFileExtension(WorkspacePlugin.INSTANCE_FILE_EXT);
 		return instanceURI;
+	}
+	/**
+	 * Try to retrieve an {@link org.osate.aadl2.Element} from an object.
+	 * This method is intended to be used with objects that obtained from a
+	 * selection event, i.e., from the
+	 * {@link org.eclipse.jface.viewers.ISelectionChangedListener#selectionChanged(org.eclipse.jface.viewers.SelectionChangedEvent)}
+	 * method.
+	 * <p>
+	 * If the object is an Element, it is returned. Otherwise, the method tries
+	 * to adapt the object to an Element. The Object could be an Element, IAdaptable, an instance model resource,
+	 * or a TreeSelection of a IFile in the Navigator
+	 * 
+	 * @param object The object to get an Element from.
+	 * @return The Element, or <code>null</code> if no Element can be obtained
+	 *         from the given object.
+	 */
+	public static Element getElement(final Object object) {
+		Element theElement = null;
+		// Is it an Element?
+		if (object instanceof Element) {
+			theElement = (Element) object;
+			if (theElement != null) return theElement;
+		}
+		if (object instanceof IAdaptable) {
+		  theElement = (Element) ((IAdaptable) object).getAdapter(Element.class);
+		  if (theElement != null) return theElement;
+	    }
+		if (object instanceof IResource && ((IResource)object).getFileExtension().equalsIgnoreCase(WorkspacePlugin.INSTANCE_FILE_EXT)){
+			Resource res = OsateResourceUtil.getResource((IResource)object);
+			EList<EObject> rl = res.getContents();
+			if (rl.isEmpty()&& rl.get(0) instanceof Element) return (Element) rl.get(0);
+		}
+		if (object instanceof TreeSelection){
+			for (Iterator iterator = ((TreeSelection)object).iterator(); iterator.hasNext();) {
+				Object f = (Object) iterator.next();
+				if (f instanceof IResource){
+					Resource res = OsateResourceUtil.getResource((IResource)f);
+					EList<EObject> rl = res.getContents();
+					if (rl.isEmpty()&& rl.get(0) instanceof Element) return (Element) rl.get(0);
+				}
+			}
+			return null;
+		}
+		return  null;
 	}
 
 

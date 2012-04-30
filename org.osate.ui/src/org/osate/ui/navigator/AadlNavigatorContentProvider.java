@@ -36,9 +36,9 @@ package org.osate.ui.navigator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.model.WorkbenchContentProvider;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 import org.osate.workspace.WorkspacePlugin;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 
 public class AadlNavigatorContentProvider extends WorkbenchContentProvider

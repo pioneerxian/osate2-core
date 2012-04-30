@@ -32,12 +32,12 @@ import org.osate.aadl2.Element;
 import org.osate.aadl2.instance.InstanceObject;
 import org.osate.aadl2.instance.provider.InstanceItemProviderAdapterFactory;
 import org.osate.aadl2.modelsupport.AadlConstants;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
 import org.osate.aadl2.parsesupport.LocationReference;
 import org.osate.aadl2.provider.Aadl2ItemProviderAdapterFactory;
 import org.osate.aadl2.util.Aadl2ResourceImpl;
 import org.osate.internal.workspace.AadlWorkspace;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 
 public final class UiUtil {

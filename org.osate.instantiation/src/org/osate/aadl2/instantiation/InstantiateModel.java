@@ -50,7 +50,10 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.common.util.UniqueEList;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.transaction.RecordingCommand;
 import org.eclipse.emf.transaction.RollbackException;
 import org.eclipse.emf.transaction.TransactionalCommandStack;
@@ -86,6 +89,7 @@ import org.osate.aadl2.PortCategory;
 import org.osate.aadl2.PortSpecification;
 import org.osate.aadl2.ProcessSubcomponent;
 import org.osate.aadl2.Property;
+import org.osate.aadl2.PropertyAssociation;
 import org.osate.aadl2.PropertyConstant;
 import org.osate.aadl2.PropertyExpression;
 import org.osate.aadl2.Subcomponent;
@@ -300,7 +304,7 @@ public class InstantiateModel {
 		// we could also use getAllPropertyDefinition(as), which returns all declared property definitions
 		// retrieving that set is faster, but it may contain property definitions that are not used;
 		// this in that case the caching of those properties would be slower
-		EList<Property> propertyDefinitionList = AadlUtil.getAllUsedPropertyDefinition(root.getSystemImplementation());
+		EList<Property> propertyDefinitionList = getAllUsedPropertyDefinition(root);
 		CacheContainedPropertyAssociationsSwitch ccpas = new CacheContainedPropertyAssociationsSwitch(classifierCache,
 				monitor, errManager);
 		ccpas.processPostOrderAll(root);
@@ -329,6 +333,51 @@ public class InstantiateModel {
 		return;
 	}
 
+	
+	
+	/**
+	 * Get all property definitions that are used in the Aadl model. This
+	 * includes the predeclared properties and any property definitions in user
+	 * declared property sets.
+	 * 
+	 * @param si System Implementation
+	 * @return property definitions
+	 */
+	public static EList<Property> getAllUsedPropertyDefinition(SystemInstance si) {
+		EList<Property> result = new UniqueEList<Property>();
+
+		EList allUsedClassifiers = new ForAllElement().processTopDownComponentClassifier(si.getSystemImplementation());
+		// collect topdown component impl. do it and its type to find PA
+		for (Iterator it = allUsedClassifiers.iterator(); it.hasNext();) {
+			ComponentClassifier cc = (ComponentClassifier) it.next();
+			addUsedPropertyDefinitions(cc, result);
+		}
+		return result;
+	}
+
+	/**
+	 * find all property associations and add its property definition to the
+	 * results
+	 * 
+	 * @param root Element whose subtree is being searched
+	 * @param result EList holding the used property definitions
+	 * @return List holding the used property definitions
+	 */
+	private static List<Property> addUsedPropertyDefinitions(Element root, List<Property> result) {
+		TreeIterator<Element> it = EcoreUtil.getAllContents(Collections.singleton(root));
+		while (it.hasNext()) {
+			Element ao = it.next();
+			if (ao instanceof PropertyAssociation) {
+				Property pd = ((PropertyAssociation) ao).getProperty();
+				if (pd != null) {
+					result.add(pd);
+				}
+			}
+		}
+		return result;
+	}
+
+	
 	// --------------------------------------------------------------------------------------------
 	// Methods for instantiating the component hierarchy
 	// --------------------------------------------------------------------------------------------

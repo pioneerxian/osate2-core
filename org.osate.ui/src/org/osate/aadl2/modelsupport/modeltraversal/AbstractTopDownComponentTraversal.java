@@ -42,6 +42,7 @@ import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.Subcomponent;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
+import org.osate.xtext.aadl2.properties.util.ModelUtil;
 
 
 
@@ -84,7 +85,7 @@ abstract class AbstractTopDownComponentTraversal extends AbstractTraversal {
 		/* Our roots will be those component implementations that are not
 		 * referenced by anything, e.g., top-level systems.
 		 */
-		final EList<ComponentImplementation> cil = AadlUtil.getAllComponentImpl();
+		final EList<ComponentImplementation> cil = ModelUtil.getAllComponentImpl();
 		for (Iterator<ComponentImplementation> all = cil.iterator(); processingMethod.notCancelled() && all.hasNext();) {
 			final ComponentImplementation aobj = all.next();
 			if (!hasUsageReferences(aobj, cil)) {

@@ -33,10 +33,10 @@ import org.osate.aadl2.Aadl2Factory;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.Comment;
 import org.osate.aadl2.Element;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.util.Aadl2ResourceFactoryImpl;
 import org.osate.aadl2.util.Aadl2ResourceImpl;
 import org.osate.workspace.WorkspacePlugin;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 import com.google.inject.Inject;
 

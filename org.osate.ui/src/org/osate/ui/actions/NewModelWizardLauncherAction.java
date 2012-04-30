@@ -45,9 +45,9 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
 import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
 import org.osate.ui.wizards.NewModelWizard;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 
 
 /**

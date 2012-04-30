@@ -41,7 +41,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.osate.aadl2.Element;
 import org.osate.aadl2.modelsupport.AadlConstants;
 import org.osate.aadl2.modelsupport.Activator;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
+import org.osate.aadl2.modelsupport.util.ResourceConversionUtil;
 
 
 /**
@@ -168,7 +168,7 @@ public final class MarkerAnalysisErrorReporter extends AbstractAnalysisErrorRepo
 				throw new IllegalArgumentException("Cannot create a MarkerAnalysisErrorReporter when the Resource is null");
 			}
 			final IResource irsrc =
-				OsateResourceUtil.convertToIResource(rsrc);
+				ResourceConversionUtil.convertToIResource(rsrc);
 			if (irsrc != null && irsrc.exists()) {
 				return new MarkerAnalysisErrorReporter(rsrc, irsrc, markerType);
 			} else {

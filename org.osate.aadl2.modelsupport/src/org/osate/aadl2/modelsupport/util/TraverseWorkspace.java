@@ -1,18 +1,14 @@
-package org.osate.aadl2.modelsupport.modeltraversal;
+package org.osate.aadl2.modelsupport.util;
 
 import java.util.HashSet;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
-import org.osate.aadl2.modelsupport.util.PredeclaredProperties;
-import org.osate.internal.workspace.AadlProject;
 import org.osate.workspace.WorkspacePlugin;
 
 public class TraverseWorkspace {

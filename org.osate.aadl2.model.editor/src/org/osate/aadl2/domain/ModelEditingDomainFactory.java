@@ -52,7 +52,7 @@ import org.eclipse.emf.workspace.util.WorkspaceValidateEditSupport;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
-import org.osate.aadl2.modelsupport.resources.OsateResourceUtil;
+import org.osate.xtext.aadl2.properties.resources.OsateResourceUtil;
 import org.osate.xtext.aadl2.ui.internal.Aadl2Activator;
 
 
