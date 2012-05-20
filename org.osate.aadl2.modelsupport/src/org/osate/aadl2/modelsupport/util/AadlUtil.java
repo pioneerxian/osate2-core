@@ -50,6 +50,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
@@ -73,6 +74,8 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.osate.aadl2.Aadl2Package;
 import org.osate.aadl2.AadlPackage;
 import org.osate.aadl2.AbstractConnectionEnd;
+import org.osate.aadl2.AnnexLibrary;
+import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.Classifier;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
@@ -88,6 +91,8 @@ import org.osate.aadl2.EndToEndFlowSegment;
 import org.osate.aadl2.Feature;
 import org.osate.aadl2.FeatureGroup;
 import org.osate.aadl2.FeatureGroupConnection;
+import org.osate.aadl2.FeaturePrototype;
+import org.osate.aadl2.FeatureType;
 import org.osate.aadl2.FlowElement;
 import org.osate.aadl2.FlowEnd;
 import org.osate.aadl2.FlowImplementation;
@@ -112,7 +117,10 @@ import org.osate.aadl2.Property;
 import org.osate.aadl2.PropertyAssociation;
 import org.osate.aadl2.PropertySet;
 import org.osate.aadl2.PropertyType;
+import org.osate.aadl2.Prototype;
+import org.osate.aadl2.Realization;
 import org.osate.aadl2.Subcomponent;
+import org.osate.aadl2.SubcomponentType;
 import org.osate.aadl2.SystemImplementation;
 import org.osate.aadl2.SystemSubcomponent;
 import org.osate.aadl2.ThreadGroupSubcomponent;
@@ -249,10 +257,12 @@ public final class AadlUtil {
 				if (obj instanceof NamedElement){
 					final NamedElement lit = (NamedElement)obj;
 					final String name = lit.getName().toLowerCase();
-					if (seen.contains(name)) {
-						result.add(lit);
-					} else {
-						seen.add(name);
+					if (name != null || name.isEmpty()){
+						if (seen.contains(name)) {
+							result.add(lit);
+						} else {
+							seen.add(name);
+						}
 					}
 				}
 			}
@@ -1261,9 +1271,41 @@ public final class AadlUtil {
 		return null;
 	}
 	
+	public static String getFeaturePrototypeName(FeaturePrototype ft, Element context){
+		if (Aadl2Util.isNull(ft)) return "";
+		return ((NamedElement)ft).getName();
+	}
+	
+	/*
+	 * for classifier figure out whether it needs to be qualified
+	 * Otherwise just return name.
+	 * If null or proxy return empty string
+	 */
+	public static String getClassifierOrLocalName(NamedElement ne, Element context){
+		if (Aadl2Util.isNull(ne)) return "";
+		if (ne instanceof Classifier){
+			return getClassifierName((Classifier) ne, context);
+		} else {
+			return ((NamedElement)ne).getName();
+		}
+	}
+	
+	public static String getSubcomponentTypeName(SubcomponentType st, Element context){
+		return getClassifierOrLocalName(st, context);
+	}
+	
+	public static String getFeatureTypeName(FeatureType st, Element context){
+		return getClassifierOrLocalName((NamedElement)st, context);
+	}
+
 	public static String getClassifierName(Classifier cl, Element context){
 		if (Aadl2Util.isNull(cl)) return "";
-		if (cl.getElementRoot() == context.getElementRoot()){
+		if (context instanceof Realization){
+			// get the name from the stored name in implementation
+			ComponentImplementation ci = (ComponentImplementation)context.getOwner();
+			return ci.getTypeName();
+		}
+		if (cl.getElementRoot().getName().equalsIgnoreCase(context.getElementRoot().getName())){
 			return cl.getName();
 		} else {
 			return cl.getQualifiedName();
@@ -2300,7 +2342,7 @@ public final class AadlUtil {
 			imports = ((PackageSection) context).getImportedUnits();
 		for (ModelUnit imported : imports) {
 			if (imported instanceof AadlPackage && !imported.eIsProxy()) {
-				if (imported == pack)
+				if (imported.getName().equalsIgnoreCase(pack.getName()))
 					return true;
 			}
 		}
@@ -2309,7 +2351,7 @@ public final class AadlUtil {
 			for (ModelUnit imported : ((AadlPackage) context.eContainer())
 					.getOwnedPublicSection().getImportedUnits())
 				if (imported instanceof AadlPackage && !imported.eIsProxy()
-						&& imported == pack)
+						&& imported.getName().equalsIgnoreCase(pack.getName()))
 					return true;
 		// TODO need to handle public section declared in a separate package
 		// declaration
@@ -2360,6 +2402,52 @@ public final class AadlUtil {
 					&& importedPropertySet == ps)
 				return true;
 		return false;
+	}
+	
+
+	/*
+	 * retrieve all annex subclauses of a given name that belong to a Classifier.
+	 * The list contains the subclause (if any) of the classifier and the subclause of any classifier being extended.
+	 * Note that each classifier can only have one 
+	 */
+	public static EList<AnnexSubclause> getAllAnnexSubclauses(Classifier cl,String annexName) {
+		final EList<AnnexSubclause> result = new BasicEList<AnnexSubclause>();
+		final EList<Classifier> classifiers = cl.getAllExtendPlusSelf();
+		for (final ListIterator<Classifier> i = classifiers.listIterator(classifiers.size()); i.hasPrevious();) {
+			final Classifier current = i.previous();
+			EList<AnnexSubclause> asclist = AadlUtil.findAnnexSubclause(current,annexName);
+			result.addAll(asclist);
+		}
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	/**
+	 * returns all subclauses whose names match. Note that a classifier can have multiple subclauses of the same annex if each subclause is mode specific.
+	 * @param annexName
+	 * @param c
+	 * @return EList<AnnexSubclause>
+	 */
+	public static EList<AnnexSubclause> findAnnexSubclause(Classifier c, String annexName){
+		return (EList)findNamedElementsInList(c.getOwnedAnnexSubclauses(), annexName);
+	}
+
+	public static AnnexLibrary findPublicAnnexLibrary(AadlPackage p, String annexName){
+		PackageSection ps = p.getOwnedPublicSection();
+		AnnexLibrary res = null;
+		if (ps != null){
+			res = (AnnexLibrary)findNamedElementInList(ps.getOwnedAnnexLibraries(), annexName);
+		}
+		return res;
+	}
+	
+	public static AnnexLibrary findPrivateAnnexLibrary( AadlPackage p,String annexName){
+		PackageSection ps = p.getOwnedPrivateSection();
+		AnnexLibrary res = null;
+		if (ps != null){
+			res = (AnnexLibrary)findNamedElementInList(ps.getOwnedAnnexLibraries(), annexName);
+		}
+		return res;
 	}
 
 }
