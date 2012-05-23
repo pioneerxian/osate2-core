@@ -65,6 +65,7 @@ import org.osate.aadl2.VirtualProcessorImplementation;
 import org.osate.aadl2.VirtualProcessorType;
 import org.osate.aadl2.instance.ComponentInstance;
 import org.osate.aadl2.instance.SystemInstance;
+import org.osate.xtext.aadl2.errormodel.ui.labeling.ErrorModelLabelProvider;
 
 import com.google.inject.Inject;
 
@@ -73,7 +74,7 @@ import com.google.inject.Inject;
  * 
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#labelProvider
  */
-public class Aadl2LabelProvider extends DefaultEObjectLabelProvider {
+public class Aadl2LabelProvider extends ErrorModelLabelProvider {
 
 	@Inject
 	public Aadl2LabelProvider(AdapterFactoryLabelProvider delegate) {
