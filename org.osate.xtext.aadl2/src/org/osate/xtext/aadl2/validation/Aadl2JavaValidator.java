@@ -22,12 +22,14 @@ import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.impl.HiddenLeafNode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
+import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 import org.osate.aadl2.*;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
 import org.osate.aadl2.util.Aadl2Util;
 import org.osate.xtext.aadl2.errormodel.validation.ErrorModelJavaValidator;
+import org.osate.xtext.aadl2.properties.util.EMFIndexRetrieval;
 
 
 public class Aadl2JavaValidator extends ErrorModelJavaValidator { //AbstractAadl2JavaValidator {
@@ -341,13 +343,12 @@ public class Aadl2JavaValidator extends ErrorModelJavaValidator { //AbstractAadl
 		}
 	}
 	
-//	@Check(CheckType.FAST)
-//	public void caseAadlPackage(AadlPackage pack){
-////		checkEndId(pack);
-////		if (PropertiesLinkingService.getPropertiesLinkingService(pack).hasDuplicatesAadlPackage(pack)){
-////			error(pack,"Duplicate packages "+ pack.getName());
-////		}
-//	}
+	@Check(CheckType.FAST)
+	public void caseAadlPackage(AadlPackage pack){
+		if (hasDuplicatesAadlPackage(pack)){
+			error(pack,"Duplicate packages "+ pack.getName());
+		}
+	}
 
 	
 	
@@ -3193,6 +3194,24 @@ public class Aadl2JavaValidator extends ErrorModelJavaValidator { //AbstractAadl
 			}
 		}
 	}
+
+	
+	 
+	/**
+	 * check whether there are duplicate names
+	 */
+	public boolean hasDuplicatesAadlPackage(EObject context) {
+		String crossRefString = ((NamedElement)context).getName();
+		int count = 0;
+		EList<IEObjectDescription> plist = EMFIndexRetrieval.getAllPackagesInWorkspace();
+		for (IEObjectDescription ieObjectDescription : plist) {
+			String s = ieObjectDescription.getQualifiedName().toString();
+			if (crossRefString.equalsIgnoreCase(s)){
+				count++;
+			}
+		}
+	return count > 1;
+}
 
 
 }
