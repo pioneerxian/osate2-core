@@ -260,7 +260,7 @@ public final class AadlUtil {
 				if (obj instanceof NamedElement){
 					final NamedElement lit = (NamedElement)obj;
 					final String name = lit.getName().toLowerCase();
-					if (name != null || name.isEmpty()){
+					if (name != null && !name.isEmpty()){
 						if (seen.contains(name)) {
 							result.add(lit);
 						} else {
@@ -2152,7 +2152,7 @@ public final class AadlUtil {
 	private static List<Property> addUsedPropertyDefinitions(Element root, List<Property> result) {
 		TreeIterator<Element> it = EcoreUtil.getAllContents(Collections.singleton(root));
 		while (it.hasNext()) {
-			Element ao = it.next();
+			EObject ao = it.next();
 			if (ao instanceof PropertyAssociation) {
 				Property pd = ((PropertyAssociation) ao).getProperty();
 				if (pd != null) {
