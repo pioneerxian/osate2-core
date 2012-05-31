@@ -1,38 +1,48 @@
 
 package org.osate.xtext.aadl2.validation;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.lang.System;
 
 import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.xtext.linking.impl.IllegalNodeException;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.impl.HiddenLeafNode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.IEObjectDescription;
-import org.eclipse.xtext.scoping.IScope;
-import org.eclipse.xtext.scoping.impl.ImportScope;
 import org.eclipse.xtext.validation.Check;
 import org.eclipse.xtext.validation.CheckType;
 import org.osate.aadl2.*;
 import org.osate.aadl2.modelsupport.util.AadlUtil;
 import org.osate.aadl2.util.Aadl2Util;
-import org.osate.xtext.aadl2.properties.linking.PropertiesLinkingService;
+import org.osate.xtext.aadl2.errormodel.validation.ErrorModelJavaValidator;
 import org.osate.xtext.aadl2.properties.util.EMFIndexRetrieval;
 
 
-public class Aadl2JavaValidator extends AbstractAadl2JavaValidator {
+public class Aadl2JavaValidator extends ErrorModelJavaValidator { //AbstractAadl2JavaValidator {
 
+
+	@Override
+	protected List<EPackage> getEPackages() {
+	    List<EPackage> result = new ArrayList<EPackage>();
+	    result.add(org.osate.xtext.aadl2.errormodel.errorModel.ErrorModelPackage.eINSTANCE);
+	    result.add(EPackage.Registry.INSTANCE.getEPackage("http://www.eclipse.org/emf/2002/Ecore"));
+	    result.add(EPackage.Registry.INSTANCE.getEPackage("http://aadl.info/AADL/2.0"));
+		return result;
+	}
 	
 
 	
@@ -3187,7 +3197,6 @@ public class Aadl2JavaValidator extends AbstractAadl2JavaValidator {
 			}
 		}
 	}
-
 	
 	 
 	/**

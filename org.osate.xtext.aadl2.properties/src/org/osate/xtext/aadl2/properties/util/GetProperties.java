@@ -187,6 +187,7 @@ public class GetProperties {
 	public static PropertyConstant lookupPropertyConstant(String name) {
 		return EMFIndexRetrieval.getPropertyConstantInWorkspace(name);
 	}
+	
 	/**
 	 * Retrieve the unit literal given a unit string for a property It is useful
 	 * when calling getScaledValue methods that require the literal as object
