@@ -44,6 +44,11 @@
  */
 package org.osate.aadl2.modelsupport.util;
 
+import static org.osate.aadl2.ComponentCategory.BUS;
+import static org.osate.aadl2.ComponentCategory.DATA;
+import static org.osate.aadl2.ComponentCategory.SUBPROGRAM;
+import static org.osate.aadl2.ComponentCategory.SUBPROGRAM_GROUP;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -80,6 +85,7 @@ import org.osate.aadl2.AccessType;
 import org.osate.aadl2.AnnexLibrary;
 import org.osate.aadl2.AnnexSubclause;
 import org.osate.aadl2.Classifier;
+import org.osate.aadl2.ComponentCategory;
 import org.osate.aadl2.ComponentClassifier;
 import org.osate.aadl2.ComponentImplementation;
 import org.osate.aadl2.ComponentType;
@@ -2040,6 +2046,33 @@ public final class AadlUtil {
 		return false;
 	}
 
+
+	/**
+	 * get ingoing connections to subcomponents from a specified feature of the
+	 * component impl
+	 * 
+	 * @param feature component impl feature that is the source of a connection
+	 * @param context the outer feature (feature group) or null
+	 * @return EList connections with feature as source
+	 */
+	public static EList<Connection> getIngoingConnections(ComponentImplementation cimpl,Feature feature) {
+		EList<Connection> result = new BasicEList<Connection>();
+		List<Feature> features = feature.getAllFeatureRefinements();
+
+		for (Connection conn : cimpl.getAllConnections()) {
+			Context cxt = conn.getAllSourceContext();
+			if (features.contains(conn.getAllSource())
+					|| (conn.isBidirectional() && features.contains(conn.getAllDestination()))) {
+					result.add(conn);
+			}
+			if ((features.contains(conn.getAllSourceContext())
+					|| (conn.isBidirectional() && features.contains(conn.getAllDestinationContext())))) {
+					result.add(conn);
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * determine whether the feature is an outgoing port or feature group
 	 * 
@@ -2066,6 +2099,11 @@ public final class AadlUtil {
 				if (isOutgoingFeature(f)) {
 					return true;
 				}
+			}
+			// subcomponent can be access source
+			ComponentCategory cat = o.getCategory();
+			if (cat == DATA || cat == BUS || cat == SUBPROGRAM || cat == SUBPROGRAM_GROUP) {
+				return true;
 			}
 		}
 		return false;
